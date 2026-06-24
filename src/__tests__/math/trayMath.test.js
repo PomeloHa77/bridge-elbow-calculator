@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toRadians, toDegrees, round2, climbCalc, horizontalCalc, multiLayerCalc } from '../../math/trayMath.js'
+import { toRadians, toDegrees, round2, climbCalc, horizontalCalc, multiLayerCalc, reducerCalc } from '../../math/trayMath.js'
 
 describe('utility functions', () => {
   it('toRadians(180) returns approximately PI', () => {
@@ -102,5 +102,29 @@ describe('multiLayerCalc', () => {
 
   it('throws when angle is 0', () => {
     expect(() => multiLayerCalc(0, 100, 3)).toThrow()
+  })
+})
+
+describe('reducerCalc', () => {
+  it('eccentric, widthDiff 100, length 200', () => {
+    const r = reducerCalc(100, 200, 'eccentric')
+    expect(r.diagonalCutLength).toBeCloseTo(223.61, 1)
+    expect(r.cutAngle).toBeCloseTo(26.57, 1)
+  })
+
+  it('concentric, widthDiff 100, length 200', () => {
+    const r = reducerCalc(100, 200, 'concentric')
+    expect(r.diagonalCutLength).toBeCloseTo(206.16, 1)
+    expect(r.cutAngle).toBeCloseTo(14.04, 1)
+  })
+
+  it('eccentric, widthDiff 0, length 100', () => {
+    const r = reducerCalc(0, 100, 'eccentric')
+    expect(r.diagonalCutLength).toBe(100)
+    expect(r.cutAngle).toBe(0)
+  })
+
+  it('throws when transitionLength is 0', () => {
+    expect(() => reducerCalc(100, 0, 'eccentric')).toThrow()
   })
 })

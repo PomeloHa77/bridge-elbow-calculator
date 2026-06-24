@@ -50,3 +50,13 @@ export function multiLayerCalc(angle, layerSpacing, layerCount) {
   }
   return result
 }
+
+// 大小头变径计算
+export function reducerCalc(widthDiff, transitionLength, reducerType) {
+  if (transitionLength <= 0) throw new Error('过渡长度必须大于 0')
+  if (widthDiff < 0) throw new Error('变化宽度不能为负')
+  const effectiveDiff = reducerType === 'concentric' ? widthDiff / 2 : widthDiff
+  const diagonalCutLength = round2(Math.sqrt(effectiveDiff ** 2 + transitionLength ** 2))
+  const cutAngle = round2(toDegrees(Math.atan(effectiveDiff / transitionLength)))
+  return { diagonalCutLength, cutAngle }
+}
