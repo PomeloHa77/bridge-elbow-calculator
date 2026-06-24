@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toRadians, toDegrees, round2, climbCalc } from '../../math/trayMath.js'
+import { toRadians, toDegrees, round2, climbCalc, horizontalCalc } from '../../math/trayMath.js'
 
 describe('utility functions', () => {
   it('toRadians(180) returns approximately PI', () => {
@@ -48,5 +48,27 @@ describe('climbCalc', () => {
 
   it('throws when climbHeight is 0', () => {
     expect(() => climbCalc(45, 0, 100)).toThrow()
+  })
+})
+
+describe('horizontalCalc', () => {
+  it('45° horizontal, shift 200, width 150', () => {
+    const r = horizontalCalc(45, 200, 150)
+    expect(r.hypotenuse).toBeCloseTo(282.84, 1)
+    expect(r.cutWidth).toBeCloseTo(124.26, 1)
+  })
+
+  it('90° horizontal, shift 200, width 150', () => {
+    const r = horizontalCalc(90, 200, 150)
+    expect(r.hypotenuse).toBe(200)
+    expect(r.cutWidth).toBe(300)
+  })
+
+  it('throws when angle is 0', () => {
+    expect(() => horizontalCalc(0, 200, 150)).toThrow()
+  })
+
+  it('throws when shiftWidth is 0', () => {
+    expect(() => horizontalCalc(45, 0, 150)).toThrow()
   })
 })
