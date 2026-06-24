@@ -60,3 +60,16 @@ export function reducerCalc(widthDiff, transitionLength, reducerType) {
   const cutAngle = round2(toDegrees(Math.atan(effectiveDiff / transitionLength)))
   return { diagonalCutLength, cutAngle }
 }
+
+// 死角弯避让计算
+export function avoidanceCalc(avoidDistance, angle) {
+  if (angle <= 0 || angle > 90) throw new Error('角度必须在 0 到 90 度之间')
+  if (avoidDistance <= 0) throw new Error('避让距离必须大于 0')
+  if (angle === 90) {
+    return { advanceDistance: 0, bypassLength: round2(avoidDistance) }
+  }
+  const R = toRadians(angle)
+  const advanceDistance = round2(avoidDistance / Math.tan(R))
+  const bypassLength = round2(avoidDistance / Math.sin(R))
+  return { advanceDistance, bypassLength }
+}

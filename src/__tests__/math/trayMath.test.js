@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toRadians, toDegrees, round2, climbCalc, horizontalCalc, multiLayerCalc, reducerCalc } from '../../math/trayMath.js'
+import { toRadians, toDegrees, round2, climbCalc, horizontalCalc, multiLayerCalc, reducerCalc, avoidanceCalc } from '../../math/trayMath.js'
 
 describe('utility functions', () => {
   it('toRadians(180) returns approximately PI', () => {
@@ -126,5 +126,37 @@ describe('reducerCalc', () => {
 
   it('throws when transitionLength is 0', () => {
     expect(() => reducerCalc(100, 0, 'eccentric')).toThrow()
+  })
+})
+
+describe('avoidanceCalc', () => {
+  it('45° avoidance, distance 100', () => {
+    const r = avoidanceCalc(100, 45)
+    expect(r.advanceDistance).toBe(100)
+    expect(r.bypassLength).toBeCloseTo(141.42, 1)
+  })
+
+  it('90° avoidance, distance 100 (special case)', () => {
+    const r = avoidanceCalc(100, 90)
+    expect(r.advanceDistance).toBe(0)
+    expect(r.bypassLength).toBe(100)
+  })
+
+  it('30° avoidance, distance 100', () => {
+    const r = avoidanceCalc(100, 30)
+    expect(r.advanceDistance).toBeCloseTo(173.21, 1)
+    expect(r.bypassLength).toBe(200)
+  })
+
+  it('throws when angle is 0', () => {
+    expect(() => avoidanceCalc(100, 0)).toThrow()
+  })
+
+  it('throws when angle > 90', () => {
+    expect(() => avoidanceCalc(100, 91)).toThrow()
+  })
+
+  it('throws when avoidDistance is 0', () => {
+    expect(() => avoidanceCalc(0, 45)).toThrow()
   })
 })
