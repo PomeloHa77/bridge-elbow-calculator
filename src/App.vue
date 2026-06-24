@@ -9,7 +9,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Tabbar as VanTabbar, TabbarItem as VanTabbarItem } from 'vant'
 
 const active = ref('')
 </script>
