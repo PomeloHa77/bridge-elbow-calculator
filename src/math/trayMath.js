@@ -32,3 +32,21 @@ export function horizontalCalc(angle, shiftWidth, trayWidth) {
   const cutWidth = round2(2 * trayWidth * Math.tan(R / 2))
   return { hypotenuse, cutWidth }
 }
+
+// 多层过桥计算
+export function multiLayerCalc(angle, layerSpacing, layerCount) {
+  if (angle <= 0 || angle > 90) throw new Error('角度必须在 0 到 90 度之间')
+  if (layerSpacing <= 0) throw new Error('层间距必须大于 0')
+  if (layerCount < 1) throw new Error('层数必须大于等于 1')
+  const R = toRadians(angle)
+  const staggerPerLayer = round2(layerSpacing * Math.tan(R / 2))
+  const result = []
+  for (let n = 1; n <= layerCount; n++) {
+    result.push({
+      layer: n,
+      staggerFromBase: round2((n - 1) * layerSpacing * Math.tan(R / 2)),
+      staggerPerLayer
+    })
+  }
+  return result
+}

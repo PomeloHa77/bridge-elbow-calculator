@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { toRadians, toDegrees, round2, climbCalc, horizontalCalc } from '../../math/trayMath.js'
+import { toRadians, toDegrees, round2, climbCalc, horizontalCalc, multiLayerCalc } from '../../math/trayMath.js'
 
 describe('utility functions', () => {
   it('toRadians(180) returns approximately PI', () => {
@@ -70,5 +70,37 @@ describe('horizontalCalc', () => {
 
   it('throws when shiftWidth is 0', () => {
     expect(() => horizontalCalc(45, 0, 150)).toThrow()
+  })
+})
+
+describe('multiLayerCalc', () => {
+  it('45°, spacing 100, 3 layers', () => {
+    const r = multiLayerCalc(45, 100, 3)
+    expect(r).toHaveLength(3)
+    expect(r[0].layer).toBe(1)
+    expect(r[0].staggerFromBase).toBe(0)
+    expect(r[1].staggerFromBase).toBeCloseTo(41.42, 1)
+    expect(r[2].staggerFromBase).toBeCloseTo(82.84, 1)
+    expect(r[1].staggerPerLayer).toBeCloseTo(41.42, 1)
+  })
+
+  it('90°, spacing 200, 2 layers', () => {
+    const r = multiLayerCalc(90, 200, 2)
+    expect(r[0].staggerFromBase).toBe(0)
+    expect(r[1].staggerFromBase).toBe(200)
+  })
+
+  it('60°, spacing 100, 1 layer', () => {
+    const r = multiLayerCalc(60, 100, 1)
+    expect(r).toHaveLength(1)
+    expect(r[0].staggerFromBase).toBe(0)
+  })
+
+  it('throws when layerCount < 1', () => {
+    expect(() => multiLayerCalc(45, 100, 0)).toThrow()
+  })
+
+  it('throws when angle is 0', () => {
+    expect(() => multiLayerCalc(0, 100, 3)).toThrow()
   })
 })
